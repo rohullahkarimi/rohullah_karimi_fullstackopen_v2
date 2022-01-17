@@ -1,0 +1,15 @@
+browser->server: HTTP GET call for spa file
+server-->browser: HTML-code return HTML Elements for spa 
+browser->server: HTTP GET call for main.css -> styles
+server-->browser: main.css 
+browser->server: HTTP GET call for main.js -> frontend 
+server-->browser: main.js
+browser->server: HTTP GET call for data.json
+server-->browser: data.json 
+browser->server: HTTP GET call for favicon.ico
+server-->browser: favicon.ico
+
+note over browser:
+main.js get data.json files and loop it to HTML element
+end note
+

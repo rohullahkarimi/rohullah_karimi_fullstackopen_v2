@@ -1,0 +1,19 @@
+browser->server: HTTP GET send user input to server 
+server-->browser: HTML-code and response with 302 status, insert new note
+browser->server: HTTP GET new request to get all notes
+server-->browser: 200 status response for all notes 
+browser->server: HTTP GET Request for JS and CSS files 
+server-->browser: Responded 200 for both CSS and JS files 
+
+note over browser:
+browser starts executing js-code
+that requests JSON data from server 
+end note
+
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/data.json
+server-->browser: [{ content: "HTML is easy", date: "2019-05-23" }, ...]
+
+note over browser:
+browser executes the event handler
+that renders notes to display
+end note

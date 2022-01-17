@@ -1,0 +1,10 @@
+The single page app works faster. The JS file gets /exampleapp/data.json and print it to HTML element. 
+---------------
+
+
+browser->server: HTTP GET send user input to server -> new_note_spa, add added element right away to UI element
+server-->browser: HTML-code success, return 201 status with data.json
+
+note over browser:
+The inserted note appear faster, the reason is that the page not fully refresh
+end note

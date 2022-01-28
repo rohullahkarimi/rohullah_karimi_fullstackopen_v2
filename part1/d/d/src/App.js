@@ -10,6 +10,7 @@ const Result = (props) => {
   if(selectedItem){
     return (
       <div>
+          <h3>Anecdote of the day</h3>
           <p id="votes">VOTES: {itemVotes}</p>
           <p id="index">index: {indexNumber}</p>
           <p id="notes">{selectedItem}</p>
@@ -23,6 +24,18 @@ const Result = (props) => {
     )
   }
 }
+
+const Most_votes = (props) => {
+  const favorite = props.datacontent[2]
+
+  return (
+    <div>
+        <h3>Anecdote with the most votes</h3>
+        <p>{favorite}</p>
+    </div>
+  )
+  
+} 
 
 const Button = (props) => (
   <button onClick={props.handleClick}>
@@ -83,6 +96,7 @@ const App = () => {
       <Result selectedItem={anecdotes[selected]} itemVotes={copy[chooseRandomNumber]} indexNumber={chooseRandomNumber} />
       <Button handleClick={voteClick} text="Vote"  />
       <Button handleClick={clickPushed} text="next anecdotes" datacontent={anecdotes} />
+      <Most_votes datacontent={anecdotes} />
     </div>
   )
 }

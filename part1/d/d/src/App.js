@@ -1,20 +1,27 @@
 import React, { useState } from 'react'
+import $ from 'jquery'
 
-
-const StatisticLine = (props) => (
-  <tr>
-    <th>{props.text} </th>
-    <th>{props.value}</th>
-  </tr>
-)
 
 const Result = (props) => {
   const selectedItem = props.selectedItem
-  return (
-    <div>
-        <p>{selectedItem}</p>
-    </div>
-  )
+  const itemVotes = props.itemVotes
+  const indexNumber = props.indexNumber
+  
+  if(selectedItem){
+    return (
+      <div>
+          <p id="votes">VOTES: {itemVotes}</p>
+          <p id="index">index: {indexNumber}</p>
+          <p id="notes">{selectedItem}</p>
+      </div>
+    )
+  }else{
+    return (
+      <div>
+          <p>Click the button</p>
+      </div>
+    )
+  }
 }
 
 const Button = (props) => (
@@ -22,6 +29,9 @@ const Button = (props) => (
     {props.text}
   </button>
 )
+
+
+
 
 const App = () => {
   const anecdotes = [
@@ -33,13 +43,46 @@ const App = () => {
     'Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.',
     'Programming without an extremely heavy use of console.log is same as if a doctor would refuse to use x-rays or blood tests when diagnosing patients'
   ]
-  const [selected, setSelected] = useState(0)
-  const selectedItem = anecdotes[Math.floor(Math.random()*anecdotes.length)];
+  
+  const [selected, setSelected] = useState(1)
+  var chooseRandomNumber
+  //console.log(chooseRandomNumber)
 
+
+  const points = [0, 0, 0, 0, 0, 0, 0]
+  const copy = [...points]
+  
+  
+  
+
+  // set random
+  const setToSelected = newValue =>{
+    setSelected(newValue)
+  }
+
+  // after click 
+  const clickPushed = () => {
+    chooseRandomNumber = Math.floor(Math.random() * 7);
+    console.log(chooseRandomNumber)
+    $("#index").text("Index: "+chooseRandomNumber)
+    setToSelected(chooseRandomNumber)
+    console.log(copy)
+  }
+
+  // vote click 
+  const voteClick = () => {
+    chooseRandomNumber = 0
+    console.log(chooseRandomNumber)
+    copy[chooseRandomNumber] += 1
+    console.log(copy[chooseRandomNumber])
+    $("#votes").text("Votes: "+copy[chooseRandomNumber])
+  }
+  
   return (
     <div>
-      <Result selectedItem={selectedItem} />
-      <Button handleClick={() => setSelected(selected + 1)} text="next anecdote"  />
+      <Result selectedItem={anecdotes[selected]} itemVotes={copy[chooseRandomNumber]} indexNumber={chooseRandomNumber} />
+      <Button handleClick={voteClick} text="Vote"  />
+      <Button handleClick={clickPushed} text="next anecdotes" datacontent={anecdotes} />
     </div>
   )
 }

@@ -2,7 +2,9 @@ import React from 'react'
 
 const Header = ({ course }) => {
   return (
-    <h2>{course.name}</h2>
+    <div>
+        <h1>Web Development Curriculum</h1>
+    </div>
   )
 }
 

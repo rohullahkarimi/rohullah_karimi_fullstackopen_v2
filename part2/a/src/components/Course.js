@@ -1,10 +1,25 @@
 import React from 'react'
+import Result from './Result'
+import Header from './Header'
 
 const Course = ({ course }) => {
   return (
-    <ul>
-      {course.parts.map(singleCourse => <li key={singleCourse.id}>{singleCourse.name} {singleCourse.exercises}</li>)}
-    </ul>
+    <div>
+        <Header course={course} />
+        {course.map((x,i) => {
+          return (
+            <div key={i}>
+              <h3 key={i}>{x.name}</h3>
+                  {x.parts.map((partX, partI) =>{
+                    return (
+                      <p id={partI.id} key={partI.id}>{partX.name} {partX.exercises}</p>
+                    )
+                  })}
+              <Result course={course[i]} />
+            </div>
+          )
+        })}
+    </div>
   )
 }
 

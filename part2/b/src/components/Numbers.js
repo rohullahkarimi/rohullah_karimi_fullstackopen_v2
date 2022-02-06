@@ -1,9 +1,17 @@
 import React from 'react'
 
-const Numbers = ({ number }) => {
+const Numbers = (props) => {
+  //console.log(props.number)
+  //console.log(props.filter)
+
   return (
-    <li>{number.name} {number.phonenumber}</li>
+    <div>
+      {props.number.filter(person => person.name.includes(props.filter)).map(filteredPerson => (
+        <li key={filteredPerson.id}>
+          {filteredPerson.name}  {filteredPerson.phonenumber}
+        </li>
+      ))}
+    </div>
   )
 }
-
 export default Numbers

@@ -2,13 +2,13 @@ import React, { useState } from 'react'
 import Numbers from './components/Numbers'
 
 const App = (props) => {
+  
   // index calls App component
   const [numbers, setNumbers] = useState(props.numbers)
 
   const [newName, setNewName] = useState('')
   const [newPhonenumber, setNewPhonenumber] = useState('')
-
-  const [showAll, setShowAll] = useState(true)
+  const [newFilter, setNewFilter] = useState('')
 
   const addNumber = (event) => {
     event.preventDefault()
@@ -48,15 +48,20 @@ const App = (props) => {
     setNewPhonenumber(event.target.value)
   }
 
-  const numbersToShow = showAll
-  ? numbers
-  : numbers.filter(note => note.important)
+  const handleNewFilter = (event) => {
+    console.log(event.target.value)
+    setNewFilter(event.target.value)
+  }
 
+  
 
   return (
     <div>
       <h2>Phonebook</h2>
-   
+
+      Filter shown with-<input value={newFilter}  onChange={handleNewFilter} /><br></br><br></br>
+
+
       <form onSubmit={addNumber}>
         Name: <input value={newName}  onChange={handleNameChange} /><br></br>
         Number:<input value={newPhonenumber}  onChange={handleNumberChange} />
@@ -64,10 +69,9 @@ const App = (props) => {
       </form>
 
       <h2>Numbers</h2>
+
       <ul>
-        {numbersToShow.map(note =>
-          <Numbers key={note.id} number={note} />
-        )}
+          <Numbers filter={newFilter} number={props.numbers} />
       </ul>
 
     </div>

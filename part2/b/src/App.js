@@ -6,6 +6,8 @@ const App = (props) => {
   const [numbers, setNumbers] = useState(props.numbers)
 
   const [newName, setNewName] = useState('')
+  const [newPhonenumber, setNewPhonenumber] = useState('')
+
   const [showAll, setShowAll] = useState(true)
 
   const addNumber = (event) => {
@@ -14,6 +16,7 @@ const App = (props) => {
     // set object for inserting 
     const phoneNameObject = {
         name: newName,
+        phonenumber: newPhonenumber,
         date: new Date().toISOString(),
         important: Math.random() < 0.5,
         id: numbers.length + 1,
@@ -32,11 +35,17 @@ const App = (props) => {
 
     // name back to empty 
     setNewName('')
+    setNewPhonenumber('')
+  }
+
+  const handleNameChange = (event) => {
+    console.log(event.target.value)
+    setNewName(event.target.value)
   }
 
   const handleNumberChange = (event) => {
     console.log(event.target.value)
-    setNewName(event.target.value)
+    setNewPhonenumber(event.target.value)
   }
 
   const numbersToShow = showAll
@@ -49,7 +58,8 @@ const App = (props) => {
       <h2>Phonebook</h2>
    
       <form onSubmit={addNumber}>
-        Name: <input value={newName}  onChange={handleNumberChange} />
+        Name: <input value={newName}  onChange={handleNameChange} /><br></br>
+        Number:<input value={newPhonenumber}  onChange={handleNumberChange} />
         <button type="submit">add</button>
       </form>
 

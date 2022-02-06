@@ -2,7 +2,7 @@ import React from 'react'
 
 const Numbers = ({ number }) => {
   return (
-    <li>{number.name}</li>
+    <li>{number.name} {number.phonenumber}</li>
   )
 }
 

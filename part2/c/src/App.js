@@ -1,67 +1,74 @@
 import React, { useState, useEffect } from 'react'
-import Note from './components/Note'
 import axios from 'axios'
+import { Card, Input } from 'semantic-ui-react'
 
-const App = () => {
-  const [notes, setNotes] = useState([])
-  const [newNote, setNewNote] = useState('')
-  const [showAll, setShowAll] = useState(false)
+export default function Posts() {
+    const [APIData, setAPIData] = useState([])
+    const [filteredResults, setFilteredResults] = useState([]);
+    const [searchInput, setSearchInput] = useState('');
+    useEffect(() => {
+        axios.get(`https://restcountries.com/v3.1/all`)
+            .then((response) => {
+                setAPIData(response.data);
+            })
+    }, [])
 
-  useEffect(() => {
-    console.log('effect')
-    axios
-      .get('http://localhost:3002/notes')
-      .then(response => {
-        console.log('promise fulfilled')
-        setNotes(response.data)
-      })
-  }, [])
-  console.log('render', notes.length, 'notes')
-
-  const addNote = (event) => {
-    event.preventDefault()
-    const noteObject = {
-      content: newNote,
-      date: new Date().toISOString(),
-      important: Math.random() > 0.5,
-      id: notes.length + 1,
+    const searchItems = (searchValue) => {
+        setSearchInput(searchValue)
+        if (searchInput !== '') {
+            const filteredData = APIData.filter((item) => {
+                return Object.values(item).join('').toLowerCase().includes(searchInput.toLowerCase())
+            })
+            setFilteredResults(filteredData)
+        }
+        else{
+            setFilteredResults(APIData)
+        }
     }
 
-    setNotes(notes.concat(noteObject))
-    setNewNote('')
-  }
+    return (
+        <div style={{ padding: 20 }}>
+            <Input icon='search'
+                placeholder='Etsi...'
+                onChange={(e) => searchItems(e.target.value)}
+            />
+            <div style={{ marginTop: 20 }} className="countryContent">
+                {searchInput.length > 1 ? (
+                    filteredResults.map((item) => {
+                        return (
+                            <div key={item.cca2}>
+                              <strong>{item.name.common}</strong><br></br>
+                              <p>Capital: {item.capital}</p>
+                              <p>Population: {item.population}</p>
 
-  const handleNoteChange = (event) => {
-    console.log(event.target.value)
-    setNewNote(event.target.value)
-  }
+                              <strong>Spoken languages</strong><br></br>
+                              {
+                                JSON.stringify(item.languages)
+                              }
+                              <img style={{height: 50, width: 80, marginBottom: 30}} src={item.flags.png}></img><br></br>
 
-  const notesToShow = showAll
-  ? notes
-  : notes.filter(note => note.important)
 
-  return (
-    <div>
-      <h1>Notes</h1>
-      <div>
-        <button onClick={() => setShowAll(!showAll)}>
-          show {showAll ? 'important' : 'all' }
-        </button>
-      </div>   
-      <ul>
-        {notesToShow.map(note => 
-            <Note key={note.id} note={note} />
-        )}
-      </ul>
-      <form onSubmit={addNote}>
-        <input
-          value={newNote}
-          onChange={handleNoteChange}
-        />
-        <button type="submit">save</button>
-      </form>  
-    </div>
-  )
+                              <strong>Weather in {item.capital}</strong><br></br>
+                              <p>Start Of Week: {item.startOfWeek}</p>
+                              <p>Flag: {item.flag}</p>
+
+                            </div>
+                        )
+                    })
+                ) : (
+                  console.log("nothing")
+                  /*
+                    APIData.map((item) => {
+                        return (
+                          <div key={item.cca2}>
+                            <strong>{item.name.common}</strong><br></br>
+                            <p>Capital: {item.capital[0]}</p>
+                          </div>
+                        )
+                    })
+                  */
+                )}
+            </div>
+        </div>
+    )
 }
-
-export default App

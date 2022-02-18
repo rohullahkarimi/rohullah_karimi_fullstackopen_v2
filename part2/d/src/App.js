@@ -4,11 +4,33 @@ import axios from 'axios'
 import Note from './components/Note'
 import noteService from './services/notes'
 
+
+const Notification = (props) => {
+  console.log(props.type)
+  if (props.message === null) {
+    return null
+  }
+
+  if(props.type == "error"){
+    var className = "error"
+  }else{
+    var className = "success"
+  }
+
+  return (
+    <div className={className}>
+      {props.message}
+    </div>
+  )
+}
+
 const App = () => {
   const [notes, setNotes] = useState([])
   const [newNote, setNewNote] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [showAll, setShowAll] = useState(true)
+  const [errorMessage, setErrorMessage] = useState('')
+  const [errorType, setErrorType] = useState('')
 
   useEffect(() => {
     noteService
@@ -25,21 +47,30 @@ const App = () => {
 
     const existOrNot = notes.filter(item => item.name == newNote );
     console.log(existOrNot)
-    
+
+    const noteObject = {
+      name: newNote,
+      number: newNumber,
+      important: Math.random() > 0.5,
+      id: notes.length + 1,
+    }
+
     if(Object.keys(existOrNot).length === 0) {
-      const noteObject = {
-        name: newNote,
-        number: newNumber,
-        important: Math.random() > 0.5,
-        id: notes.length + 1,
-      }
+     
+
+      console.log(noteObject)
 
       
       noteService
         .create(noteObject)
         .then(returnedNote => {
           setNotes(notes.concat(returnedNote))
+
           
+          setErrorMessage(`Added '${newNote}'`)
+          setErrorType("success")
+          
+
           setNewNote('')
           setNewNumber('')
         })
@@ -55,9 +86,11 @@ const App = () => {
           setNotes(notes.map(note => note.id !== updateId ? note : returnedNote))
         })
 
-        console.log("Confirmed")
+        setErrorMessage("Phonenumber has been changed")
+        setErrorType("success")
       }else{
-        console.log("Not confirmed")
+        setErrorMessage("Not added")
+        setErrorType("error")
       }
     }
   }
@@ -80,6 +113,8 @@ const App = () => {
     axios.delete(`http://localhost:3001/notes//${id}`)
       .then(initialNotes => {
         setNotes(initialNotes)
+        setErrorMessage("Successfully deleted")
+        setErrorType("success")
       })
   }
 
@@ -107,6 +142,7 @@ const App = () => {
   return (
     <div>
       <h1>Notes</h1>
+      <Notification message={errorMessage} type={errorType} />
       <div>
         <button onClick={() => setShowAll(!showAll)}>
           show {showAll ? 'important' : 'all' }
